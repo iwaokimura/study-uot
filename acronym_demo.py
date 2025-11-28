@@ -62,15 +62,12 @@ def create_character_cost_matrix(source: str, target: str) -> np.ndarray:
     np.ndarray
         Cost matrix of shape (len(source), len(target))
     """
-    source_chars = list(source.upper())
-    target_chars = list(target.upper())
+    source_chars = np.array(list(source.upper()))
+    target_chars = np.array(list(target.upper()))
     
-    cost_matrix = np.ones((len(source_chars), len(target_chars)))
-    
-    for i, s_char in enumerate(source_chars):
-        for j, t_char in enumerate(target_chars):
-            if s_char == t_char:
-                cost_matrix[i, j] = 0.0
+    # Use broadcasting to create boolean matrix of matching characters
+    # Then convert to cost: 0 for match, 1 for non-match
+    cost_matrix = (source_chars[:, np.newaxis] != target_chars[np.newaxis, :]).astype(float)
     
     return cost_matrix
 
